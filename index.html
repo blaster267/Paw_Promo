@@ -18,68 +18,85 @@
 </head>
 <body>
   <header class="top">
-    <div class="brand">
-      <img src="icons/icon-192.png" alt="" width="36" height="36">
-      <span>Paw Promo</span>
+    <div class="top-row">
+      <div class="brand">
+        <img src="icons/icon-192.png" alt="" width="34" height="34">
+        <span>Paw Promo</span>
+      </div>
+      <button type="button" id="newPet" class="ghost small" hidden>Start over</button>
     </div>
-    <button type="button" id="newPet" class="ghost small">New pet</button>
+    <nav class="steps" id="steps" aria-label="Steps">
+      <button type="button" data-go="photo"><b>1</b><span>Photo</span></button>
+      <button type="button" data-go="style"><b>2</b><span>Style</span></button>
+      <button type="button" data-go="details"><b>3</b><span>Details</span></button>
+      <button type="button" data-go="share"><b>4</b><span>Share</span></button>
+    </nav>
   </header>
 
   <main>
-    <div id="installTip" class="tip" hidden>
-      <div>
-        <strong>Keep Paw Promo on your phone</strong>
-        <p id="installText"></p>
-      </div>
-      <div class="tip-actions">
-        <button type="button" id="installBtn" class="primary small" hidden>Install</button>
-        <button type="button" id="installClose" class="ghost small" aria-label="Dismiss">Not now</button>
-      </div>
-    </div>
+    <!-- Step 1: photo -->
+    <section class="step" data-step="photo">
+      <h1 tabindex="-1">Start with a photo</h1>
+      <p class="lead" id="photoLead">A clear, bright photo of the pet's face works best.</p>
 
-    <section class="photo-buttons">
-      <label class="btn primary">
-        <input type="file" accept="image/*" capture="environment" id="cameraInput" hidden>
-        <span aria-hidden="true">📷</span> Take photo
-      </label>
-      <label class="btn secondary">
-        <input type="file" accept="image/*" id="libraryInput" hidden>
-        <span aria-hidden="true">🖼️</span> Choose photo
-      </label>
+      <div class="photo-card" id="photoCard" hidden>
+        <canvas id="photoThumb" width="720" height="720" aria-label="Your photo"></canvas>
+      </div>
+
+      <div class="stack">
+        <label class="btn primary big">
+          <input type="file" accept="image/*" capture="environment" id="cameraInput" class="visually-hidden">
+          <span aria-hidden="true">📷</span> <span id="cameraLabel">Take a photo</span>
+        </label>
+        <label class="btn secondary big">
+          <input type="file" accept="image/*" id="libraryInput" class="visually-hidden">
+          <span aria-hidden="true">🖼️</span> <span id="libraryLabel">Choose from my photos</span>
+        </label>
+      </div>
+
+      <div id="installTip" class="tip" hidden>
+        <div>
+          <strong>Keep Paw Promo on your phone</strong>
+          <p id="installText"></p>
+        </div>
+        <div class="tip-actions">
+          <button type="button" id="installBtn" class="primary small" hidden>Install</button>
+          <button type="button" id="installClose" class="ghost small">Not now</button>
+        </div>
+      </div>
     </section>
 
-    <section class="preview">
-      <div class="canvas-wrap" id="canvasWrap">
-        <canvas id="preview" width="1080" height="1350" aria-label="Promo preview"></canvas>
-        <p class="hint" id="dragHint" hidden>Drag the photo to move it</p>
-      </div>
-      <div class="zoom" id="zoomRow" hidden>
-        <span aria-hidden="true">🔍</span>
-        <input type="range" id="zoom" min="1" max="3" step="0.01" value="1" aria-label="Zoom photo">
-        <button type="button" id="resetView" class="ghost small">Reset</button>
-      </div>
-    </section>
-
-    <section>
-      <h2>Pick a style</h2>
+    <!-- Step 2: style -->
+    <section class="step" data-step="style" hidden>
+      <h1 tabindex="-1">Pick a style</h1>
+      <p class="lead">Tap the one you like. You can come back and change it any time.</p>
       <div class="styles" id="styles" role="radiogroup" aria-label="Promo style"></div>
     </section>
 
-    <section>
-      <h2>About the pet</h2>
-      <form id="form" class="form" autocomplete="off" onsubmit="return false">
+    <!-- Step 3: details -->
+    <section class="step" data-step="details" hidden>
+      <h1 tabindex="-1">Add the details</h1>
+      <p class="lead">Only the name is needed. Skip anything you don't want on the promo.</p>
+
+      <button type="button" class="mini" id="miniPreview" aria-label="Open the full preview">
+        <canvas data-view width="216" height="270"></canvas>
+        <span><strong id="miniTitle">Live preview</strong><small>Updates as you type. Tap to see it full size or to move the photo.</small></span>
+      </button>
+
+      <form id="form" class="form" autocomplete="off" novalidate>
         <label class="field">
-          <span>Name</span>
-          <input name="name" placeholder="Biscuit" maxlength="40" autocapitalize="words">
+          <span>Name <em class="req">needed</em></span>
+          <input name="name" placeholder="Biscuit" maxlength="40" autocapitalize="words" enterkeyhint="next">
+          <small class="help warn" id="nameError" hidden>Please add the pet's name.</small>
         </label>
         <div class="row">
           <label class="field">
             <span>Breed or species</span>
-            <input name="species" placeholder="Lab mix" maxlength="40" autocapitalize="words">
+            <input name="species" placeholder="Lab mix" maxlength="40" autocapitalize="words" enterkeyhint="next">
           </label>
           <label class="field">
             <span>Age</span>
-            <input name="age" placeholder="2 years" maxlength="20">
+            <input name="age" placeholder="2 years" maxlength="20" enterkeyhint="next">
           </label>
         </div>
         <fieldset class="field">
@@ -96,30 +113,77 @@
         </label>
         <label class="field">
           <span>Favorite things <em>separate with commas</em></span>
-          <input name="traits" placeholder="Belly rubs, tennis balls, naps" maxlength="120">
+          <input name="traits" placeholder="Belly rubs, tennis balls, naps" maxlength="120" enterkeyhint="next">
         </label>
         <label class="field">
-          <span>How to adopt <em>remembered for next time</em></span>
-          <input name="shelter" placeholder="Adopt me at Happy Tails Rescue · 555-0123" maxlength="80">
+          <span>How to adopt <em>saved for next time</em></span>
+          <input name="shelter" placeholder="Adopt me at Happy Tails Rescue · 555-0123" maxlength="80" enterkeyhint="next">
         </label>
         <label class="field">
           <span>Link for a QR code <em>optional</em></span>
           <input name="link" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false"
-            placeholder="happytails.org/adopt/biscuit" maxlength="300">
-          <small class="help" id="linkHelp">Paste the pet's adoption page and a scannable code appears on the promo.</small>
+            placeholder="happytails.org/adopt/biscuit" maxlength="300" enterkeyhint="done">
+          <small class="help" id="linkHelp"></small>
         </label>
 
         <div id="extraFields" class="extras"></div>
       </form>
     </section>
+
+    <!-- Step 4: share -->
+    <section class="step" data-step="share" hidden>
+      <h1 tabindex="-1" id="shareTitle">Ready to share!</h1>
+      <p class="lead" id="shareLead">Here's the finished promo.</p>
+      <div class="canvas-wrap">
+        <canvas data-view width="1080" height="1350" aria-label="Finished promo"></canvas>
+      </div>
+      <div class="stack">
+        <button type="button" id="shareBtn" class="btn primary big" hidden><span aria-hidden="true">📤</span> Share</button>
+        <button type="button" id="saveBtn" class="btn primary big"><span aria-hidden="true">⬇️</span> Save image</button>
+        <button type="button" id="adjustBtn" class="btn secondary"><span aria-hidden="true">✋</span> Move or zoom the photo</button>
+        <button type="button" id="editDetails" class="btn secondary"><span aria-hidden="true">✏️</span> Change the details</button>
+        <button type="button" id="anotherStyle" class="btn secondary"><span aria-hidden="true">🎨</span> Try another style</button>
+        <button type="button" id="nextPet" class="btn secondary"><span aria-hidden="true">🐾</span> Start a new pet</button>
+      </div>
+    </section>
   </main>
 
-  <div class="actionbar">
-    <button type="button" id="shareBtn" class="btn primary big" hidden>Share</button>
-    <button type="button" id="saveBtn" class="btn primary big">Save image</button>
+  <div class="actionbar" id="actionbar">
+    <button type="button" id="backBtn" class="btn ghost big back">Back</button>
+    <button type="button" id="nextBtn" class="btn primary big">Next</button>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <!-- Full preview, where the photo can be moved and zoomed -->
+  <div class="overlay" id="adjust" hidden role="dialog" aria-modal="true" aria-labelledby="adjustTitle">
+    <div class="overlay-head">
+      <strong id="adjustTitle">Move and zoom the photo</strong>
+      <button type="button" id="adjustDone" class="primary small">Done</button>
+    </div>
+    <div class="overlay-body">
+      <div class="canvas-wrap adjusting">
+        <canvas id="adjustCanvas" data-view width="1080" height="1350" aria-label="Promo preview. Drag to move the photo."></canvas>
+      </div>
+      <p class="lead center">Drag the photo to move it. Pinch or use the slider to zoom.</p>
+      <div class="zoom">
+        <button type="button" id="zoomOut" class="ghost round" aria-label="Zoom out">−</button>
+        <input type="range" id="zoom" min="1" max="3" step="0.01" value="1" aria-label="Zoom photo">
+        <button type="button" id="zoomIn" class="ghost round" aria-label="Zoom in">+</button>
+      </div>
+      <button type="button" id="resetView" class="ghost small center-btn">Put the photo back to the middle</button>
+    </div>
+  </div>
+
+  <!-- Confirm sheet -->
+  <div class="overlay sheet-wrap" id="confirm" hidden role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="sheet">
+      <strong id="confirmTitle"></strong>
+      <p id="confirmText"></p>
+      <button type="button" id="confirmYes" class="btn primary big"></button>
+      <button type="button" id="confirmNo" class="btn ghost big">Keep working on this pet</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" id="toastAction" hidden></button></div>
 
   <script type="module" src="js/app.js"></script>
 </body>

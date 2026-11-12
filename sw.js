@@ -1,6 +1,6 @@
 // Keeps Paw Promo working offline once it has been opened.
 // Bump VERSION whenever files change so phones pick up the update.
-const VERSION = 'paw-promo-v5';
+const VERSION = 'paw-promo-v6';
 const FILES = [
   './', 'index.html', 'app.css', 'fonts.css', 'manifest.webmanifest',
   'js/app.js', 'js/draw.js', 'js/templates/index.js',
