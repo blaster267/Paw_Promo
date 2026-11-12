@@ -1,6 +1,6 @@
 import {
-  W, H, drawQR, drawPhoto, drawWrapped, fitSize, spacedText, joinParts, listFrom, seeded, hashString,
-  fillRoundRect, punch, wrapLines,
+  W, H, drawQR, drawPhoto, drawWrapped, fitSize, spacedText, joinParts, listFrom,
+  punch,
 } from '../draw.js';
 
 const A = (s) => `${s}px "Abril Fatface", Georgia, serif`;
@@ -140,7 +140,7 @@ export default {
 
     // Bottom: big name + headline
     const hasQR = !!d.link?.trim();
-    const textW = W - 120 - 230;
+    const textW = hasQR ? W - 120 - 230 : W - 120;
     ctx.textAlign = 'left';
     ctx.shadowBlur = 16;
     const ns = fitSize(ctx, name, textW, 170, 70, PB);
@@ -181,25 +181,12 @@ export default {
     const info = joinParts([d.species, d.age, d.shelter], '  ·  ');
     if (info) {
       ctx.fillStyle = accent;
-      const is = fitSize(ctx, info.toUpperCase(), W - 120 - 220, 26, 16, (s) => O(700, s));
+      const is = fitSize(ctx, info.toUpperCase(), textW, 26, 16, (s) => O(700, s));
       ctx.font = O(700, is);
       ctx.fillText(info.toUpperCase(), 60, 1300);
     }
 
-    // Barcode, or a QR code in its place
-    const qx = W - 50 - 200, qy = H - 50 - 234;
-    if (hasQR && drawQR(ctx, d.link, qx, qy, 200, { label: 'SCAN ME', font: (s) => O(700, s), radius: 4 })) return;
-    const rand = seeded(hashString(name));
-    fillRoundRect(ctx, qx, H - 60 - 150, 180, 150, 4, '#fff');
-    ctx.fillStyle = '#111';
-    let x = qx + 16;
-    while (x < qx + 164) {
-      const w = 1 + Math.floor(rand() * 4);
-      ctx.fillRect(x, H - 60 - 134, w, 92);
-      x += w + 1 + Math.floor(rand() * 3);
-    }
-    ctx.font = O(400, 15);
-    ctx.textAlign = 'center';
-    ctx.fillText('FREE TO A GOOD HOME', qx + 90, H - 60 - 18);
+    // QR code in the corner, when there's a link
+    drawQR(ctx, d.link, W - 50 - 200, H - 50 - 234, 200, { label: 'SCAN ME', font: (s) => O(700, s), radius: 4 });
   },
 };
