@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Paw Promo</title>
+  <meta name="description" content="Turn a photo of a shelter pet into a fun promo for Facebook.">
+  <meta name="theme-color" content="#ff5d73">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Paw Promo">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon-192.png" alt="" width="36" height="36">
+      <span>Paw Promo</span>
+    </div>
+    <button type="button" id="newPet" class="ghost small">New pet</button>
+  </header>
+
+  <main>
+    <div id="installTip" class="tip" hidden>
+      <div>
+        <strong>Keep Paw Promo on your phone</strong>
+        <p id="installText"></p>
+      </div>
+      <div class="tip-actions">
+        <button type="button" id="installBtn" class="primary small" hidden>Install</button>
+        <button type="button" id="installClose" class="ghost small" aria-label="Dismiss">Not now</button>
+      </div>
+    </div>
+
+    <section class="photo-buttons">
+      <label class="btn primary">
+        <input type="file" accept="image/*" capture="environment" id="cameraInput" hidden>
+        <span aria-hidden="true">📷</span> Take photo
+      </label>
+      <label class="btn secondary">
+        <input type="file" accept="image/*" id="libraryInput" hidden>
+        <span aria-hidden="true">🖼️</span> Choose photo
+      </label>
+    </section>
+
+    <section class="preview">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="preview" width="1080" height="1350" aria-label="Promo preview"></canvas>
+        <p class="hint" id="dragHint" hidden>Drag the photo to move it</p>
+      </div>
+      <div class="zoom" id="zoomRow" hidden>
+        <span aria-hidden="true">🔍</span>
+        <input type="range" id="zoom" min="1" max="3" step="0.01" value="1" aria-label="Zoom photo">
+        <button type="button" id="resetView" class="ghost small">Reset</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Pick a style</h2>
+      <div class="styles" id="styles" role="radiogroup" aria-label="Promo style"></div>
+    </section>
+
+    <section>
+      <h2>About the pet</h2>
+      <form id="form" class="form" autocomplete="off" onsubmit="return false">
+        <label class="field">
+          <span>Name</span>
+          <input name="name" placeholder="Biscuit" maxlength="40" autocapitalize="words">
+        </label>
+        <div class="row">
+          <label class="field">
+            <span>Breed or species</span>
+            <input name="species" placeholder="Lab mix" maxlength="40" autocapitalize="words">
+          </label>
+          <label class="field">
+            <span>Age</span>
+            <input name="age" placeholder="2 years" maxlength="20">
+          </label>
+        </div>
+        <fieldset class="field">
+          <legend>Boy or girl</legend>
+          <div class="segmented">
+            <label><input type="radio" name="sex" value="boy"><span>Boy</span></label>
+            <label><input type="radio" name="sex" value="girl"><span>Girl</span></label>
+            <label><input type="radio" name="sex" value=""><span>Skip</span></label>
+          </div>
+        </fieldset>
+        <label class="field">
+          <span>About me</span>
+          <textarea name="bio" rows="3" maxlength="220" placeholder="Gentle goofball who loves car rides and will lean on you for pets."></textarea>
+        </label>
+        <label class="field">
+          <span>Favorite things <em>separate with commas</em></span>
+          <input name="traits" placeholder="Belly rubs, tennis balls, naps" maxlength="120">
+        </label>
+        <label class="field">
+          <span>How to adopt <em>remembered for next time</em></span>
+          <input name="shelter" placeholder="Adopt me at Happy Tails Rescue · 555-0123" maxlength="80">
+        </label>
+        <label class="field">
+          <span>Link for a QR code <em>optional</em></span>
+          <input name="link" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false"
+            placeholder="happytails.org/adopt/biscuit" maxlength="300">
+          <small class="help" id="linkHelp">Paste the pet's adoption page and a scannable code appears on the promo.</small>
+        </label>
+
+        <div id="extraFields" class="extras"></div>
+      </form>
+    </section>
+  </main>
+
+  <div class="actionbar">
+    <button type="button" id="shareBtn" class="btn primary big" hidden>Share</button>
+    <button type="button" id="saveBtn" class="btn primary big">Save image</button>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
